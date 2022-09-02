@@ -26,8 +26,12 @@ public class CartController {
     public BaseResponse<Cart> addProductToCart(@RequestBody CartRequest param){
         try{
             if (Objects.nonNull(param)){
-                cartService.addSelectProductToCart(param);
-                return new BaseResponse(CommonMessage.SAVED, CommonCode.SUCCESS);
+                if (cartService.cart().getProductId().getQuantity() == 0){
+                    return new BaseResponse<>(CommonMessage.OUT_OF_STOCK,CommonCode.BAD_REQUEST);
+                } else {
+                    cartService.addSelectProductToCart(param);
+                    return new BaseResponse(CommonMessage.SAVED, CommonCode.SUCCESS);
+                }
             } else {
                 return new BaseResponse(CommonMessage.NOT_SAVED,CommonCode.BAD_REQUEST);
             }

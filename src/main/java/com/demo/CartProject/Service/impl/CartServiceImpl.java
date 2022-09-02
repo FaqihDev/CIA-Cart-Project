@@ -13,6 +13,7 @@ import com.demo.CartProject.Service.CartService;
 import com.demo.CartProject.dto.CartRequest;
 import com.demo.CartProject.dto.CartTotalPriceResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -35,6 +36,13 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CheckoutRepository checkoutRepository;
 
+
+    @Override
+    @Bean
+    public Cart cart() {
+        Cart cart = new Cart();
+        return cart;
+    }
 
     @Override
     public void addSelectProductToCart(CartRequest param) {

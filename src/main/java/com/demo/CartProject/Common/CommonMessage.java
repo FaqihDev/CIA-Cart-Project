@@ -8,6 +8,8 @@ public class CommonMessage {
     public static final String NOT_SAVED            = "Data tidak berhasil disimpan";
     public static final String SAVED                = "Data berhasil disimpan!";
     public static final String DELETED              = "Data berhasil dihapus!";
+    public static final String OUT_OF_STOCK = "Stock barang habis. Silahkan hubungi seller!";
+
     public static final String UPDATED              = "Data berhasil diubah!";
     public static final String NOT_UPDATED          = "Data tidak berhasil diubah!";
     public static final String USERNAME_UNAVAILABLE = "Username sudah digunakan!";
