@@ -2,7 +2,9 @@ package com.demo.CartProject.Entity;
 
 
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Setter
 @Getter
 @MappedSuperclass
+@NoArgsConstructor
 public class ModelBase extends AuditableBase {
 
     @Id

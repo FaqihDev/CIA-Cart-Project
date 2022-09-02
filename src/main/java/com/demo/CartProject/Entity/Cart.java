@@ -2,6 +2,7 @@ package com.demo.CartProject.Entity;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +10,10 @@ import javax.persistence.*;
 
 @Data
 @Table(name ="cart")
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class Cart extends ModelBase {
 
     @ManyToOne
@@ -30,5 +32,4 @@ public class Cart extends ModelBase {
 
     @Column(name = "is_cancel")
     private Integer isCancel;
-
 }

@@ -9,6 +9,7 @@ import com.demo.CartProject.Service.CartService;
 import com.demo.CartProject.dto.CartRequest;
 import com.demo.CartProject.dto.CartTotalPriceResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,11 @@ public class CartController {
         } catch (Exception e){
             return new BaseResponse<>(CommonMessage.NOT_FOUND,CommonCode.NOT_FOUND);
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody CartRequest param){
+        return cartService.addProductToChart(param);
     }
 
     @GetMapping(value = "/getListProductsInCart/{userId}")
