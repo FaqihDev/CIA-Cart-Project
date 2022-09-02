@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class OutOfStockException extends RuntimeException{
 
-    @JsonProperty(value = "response_code")
     private String responseCode;
-    @JsonProperty(value = "response_message")
-    private String responseMessage;
+    private String responseMessage = "Product is out of stock";
+
+    public OutOfStockException(String responseCode) {
+        this.responseCode = responseCode;
+    }
 }

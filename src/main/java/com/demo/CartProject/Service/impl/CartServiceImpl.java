@@ -127,10 +127,10 @@ public class CartServiceImpl implements CartService {
     public ResponseEntity<?> addProductToChart(CartRequest request){
         try {
             Product product = productRepository.findById(request.getProductId())
-                    .orElseThrow(() -> new DataNotFoundException(ResponseCode.FAILED.getCode(), "Data not found"));
+                    .orElseThrow(() -> new DataNotFoundException(ResponseCode.FAILED.getCode()));
 
             if(product.getQuantity() < 1){
-                throw new OutOfStockException(ResponseCode.FAILED.getCode(), "Product is out of stock");
+                throw new OutOfStockException(ResponseCode.FAILED.getCode());
             }
 
             Cart cart = Cart.builder()
