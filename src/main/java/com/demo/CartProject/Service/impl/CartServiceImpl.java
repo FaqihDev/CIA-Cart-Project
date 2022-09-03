@@ -1,6 +1,8 @@
 package com.demo.CartProject.Service.impl;
 
 
+import com.demo.CartProject.Common.BaseResponse;
+import com.demo.CartProject.Common.ResponseCode;
 import com.demo.CartProject.Entity.Cart;
 import com.demo.CartProject.Entity.Checkout;
 import com.demo.CartProject.Entity.Product;
@@ -12,8 +14,11 @@ import com.demo.CartProject.Repository.UserRepository;
 import com.demo.CartProject.Service.CartService;
 import com.demo.CartProject.dto.CartRequest;
 import com.demo.CartProject.dto.CartTotalPriceResponseDto;
+import com.demo.CartProject.exception.DataNotFoundException;
+import com.demo.CartProject.exception.OutOfStockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -116,5 +121,30 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteProductInCart(Long id) {
         cartRepository.deleteById(id);
+    }
+
+    @Override
+    public ResponseEntity<?> addProductToChart(CartRequest request){
+        try {
+            Product product = productRepository.findById(request.getProductId())
+                    .orElseThrow(() -> new DataNotFoundException(ResponseCode.FAILED.getCode()));
+
+            if(product.getQuantity() < 1){
+                throw new OutOfStockException(ResponseCode.FAILED.getCode());
+            }
+
+            Cart cart = Cart.builder()
+                    .productId(product)
+                    .totalPrice(product.getPrice() * request.getQuantity())
+                    .isCancel(0)
+                    .build();
+
+            cartRepository.save(cart);
+
+            return ResponseEntity.ok().body(new BaseResponse<>(ResponseCode.SUCCESS.getCode(),"Add to chart success",null));
+        } catch (Exception e){
+            e.getMessage();
+            return ResponseEntity.badRequest().body(new BaseResponse<>(ResponseCode.FAILED.getCode(),"Add to chart failed",null));
+        }
     }
 }
