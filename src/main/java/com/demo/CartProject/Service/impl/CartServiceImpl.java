@@ -125,26 +125,24 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ResponseEntity<?> addProductToChart(CartRequest request){
-        try {
-            Product product = productRepository.findById(request.getProductId())
-                    .orElseThrow(() -> new DataNotFoundException(ResponseCode.FAILED.getCode()));
+        Product product = productRepository.findById(request.getProductId())
+                .orElseThrow(() -> new DataNotFoundException(ResponseCode.FAILED.getCode()));
 
-            if(product.getQuantity() < 1){
-                throw new OutOfStockException(ResponseCode.FAILED.getCode());
-            }
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(()-> new DataNotFoundException(ResponseCode.FAILED.getCode()));
 
-            Cart cart = Cart.builder()
-                    .productId(product)
-                    .totalPrice(product.getPrice() * request.getQuantity())
-                    .isCancel(0)
-                    .build();
-
-            cartRepository.save(cart);
-
-            return ResponseEntity.ok().body(new BaseResponse<>(ResponseCode.SUCCESS.getCode(),"Add to chart success",null));
-        } catch (Exception e){
-            e.getMessage();
-            return ResponseEntity.badRequest().body(new BaseResponse<>(ResponseCode.FAILED.getCode(),"Add to chart failed",null));
+        if(product.getQuantity() < 1){
+            throw new OutOfStockException(ResponseCode.FAILED.getCode());
         }
+
+        Cart cart = Cart.builder()
+                .userId(user)
+                .productId(product)
+                .totalPrice(product.getPrice() * request.getQuantity())
+                .isCancel(0)
+                .build();
+
+        cartRepository.save(cart);
+        return ResponseEntity.ok().body(new BaseResponse<>(ResponseCode.SUCCESS.getCode(),"Add to chart success",null));
     }
 }

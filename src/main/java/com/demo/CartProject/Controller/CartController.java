@@ -16,38 +16,20 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/carts")
 public class CartController {
 
     @Autowired
     public CartService cartService;
 
     //add selected product to cart
-    @PostMapping(value = "/addProductToCart")
-    public BaseResponse<Cart> addProductToCart(@RequestBody CartRequest param){
-        try{
-            if (Objects.nonNull(param)){
-                if (cartService.cart().getProductId().getQuantity() == 0){
-                    return new BaseResponse<>(CommonMessage.OUT_OF_STOCK,CommonCode.BAD_REQUEST);
-                } else {
-                    cartService.addSelectProductToCart(param);
-                    return new BaseResponse(CommonMessage.SAVED, CommonCode.SUCCESS);
-                }
-            } else {
-                return new BaseResponse(CommonMessage.NOT_SAVED,CommonCode.BAD_REQUEST);
-            }
-
-        } catch (Exception e){
-            return new BaseResponse<>(CommonMessage.NOT_FOUND,CommonCode.NOT_FOUND);
-        }
-    }
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody CartRequest param){
         return cartService.addProductToChart(param);
     }
 
-    @GetMapping(value = "/getListProductsInCart/{userId}")
+    @GetMapping(value = "{userId}")
     public BaseResponse<Cart> getAllproductInList(@PathVariable("userId") long userId){
         try{
             List<Cart> allProductsInCart = cartService.getAllProductInCart(userId);
@@ -59,7 +41,7 @@ public class CartController {
         }
     }
 
-    @PostMapping(value = "/getTotalPrice/{userId}") //Get total price of cart
+    @PostMapping(value = "{userId}")
     public BaseResponse<Cart> getTotalPrice(@PathVariable("userId") long userId){
         try{
            CartTotalPriceResponseDto cartResponse = cartService.getFinalTotalPrice(userId);//Buat Objek cart response dan ambil total price di service
@@ -72,7 +54,7 @@ public class CartController {
         return null;
     }
 
-    @DeleteMapping(value = "/deleteProductInCart/{id}")
+    @DeleteMapping(value = "{id}")
     public BaseResponse<Cart> deleteProductInCart(@PathVariable("id") long userId){
         cartService.deleteProductInCart(userId);
         return new BaseResponse(CommonMessage.DELETED,CommonCode.SUCCESS);
